@@ -23,21 +23,10 @@ import django.contrib.auth.views
 import os.path
 from . import views
 
-urlpatterns = [
-    url(r'', include('xancestry.urls')),
-    url(r'^admin/', admin.site.urls),
-    url(r'^tinymce/', include('tinymce.urls')),
-    url(r'^login/$', django.contrib.auth.views.login, {'template_name': 'login.html'}, name='login'),
-    url(r'^logout/$', django.contrib.auth.views.logout, {'next_page': '/'}, name='logout'),
-]
-
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-]
-
-urlpatterns = [
-    url(r'^$', views.index, name='people.index'),
+    url('admin/', admin.site.urls),
+    url(r'^$', views.index, name='xancestry.index'),
     url(r'^person/(?P<person_id>\d+)/$', views.person, name='person'),
     url(r'^person/(?P<person_id>\d+)/edit/$', views.edit_person, name='edit_person'),
     url(r'^person/(?P<person_id>\d+)/relatives/$', views.relatives, name='relatives'),

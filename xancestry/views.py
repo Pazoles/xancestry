@@ -19,7 +19,7 @@ from stronghold.decorators import public
 from taggit.models import Tag
 import json
 
-@public
+#@public
 def index(request):
     if not request.user.is_authenticated:
         return redirect(reverse('surnames'))
@@ -385,8 +385,8 @@ def edit_person(request, person_id):
                    'list': Person.objects.select_related('birth')})
 
 
-@user_passes_test(_staff_only)
-@require_POST
+#@user_passes_test(_staff_only)
+#@require_POST
 def add_location(request):
     form = AddLocationForm(request.POST)
     if form.is_valid():
@@ -395,7 +395,7 @@ def add_location(request):
     return HttpResponse(json.dumps(form.errors), content_type='application/json', status=422)
 
 
-@public
+#@public
 def surnames(request):
     with connection.cursor() as cursor:
         # List all surnames for non-living blood relatives born over 100 years ago, where at least
