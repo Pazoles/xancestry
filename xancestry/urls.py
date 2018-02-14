@@ -21,6 +21,7 @@ from django.conf.urls import url
 import django.views.static
 import django.contrib.auth.views
 import os.path
+from . import views
 
 urlpatterns = [
     url(r'', include('xancestry.urls')),
