@@ -11,10 +11,10 @@ from django.views.decorators.http import require_POST
 from itertools import chain, groupby
 from math import pow
 from operator import attrgetter, itemgetter
-from people.fields import UncertainDate
-from people.forms import AddLocationForm, AddPersonForm, EditPersonForm
-from people.models import Location, Person, Marriage, Event, SurnameVariant
-from people.relations import describe_relative
+from xancestry.fields import UncertainDate
+from xancestry.forms import AddLocationForm, AddPersonForm, EditPersonForm
+from xancestry.models import Location, Person, Marriage, Event, SurnameVariant
+from xancestry.relations import describe_relative
 from stronghold.decorators import public
 from taggit.models import Tag
 import json
