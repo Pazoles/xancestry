@@ -2,7 +2,7 @@ from collections import defaultdict
 from datetime import date
 from django.contrib.auth.decorators import user_passes_test
 from django.core.serializers import serialize
-from django.core.urlresolvers import reverse
+from django.core.urls import reverse
 from django.db import connection
 from django.db.models import Count, Q
 from django.http import HttpResponse
