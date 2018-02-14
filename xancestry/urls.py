@@ -15,26 +15,21 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from django.views.generic import RedirectView
+from django.conf.urls import url
 import django.views.static
 import django.contrib.auth.views
 import os.path
-import settings
 
 urlpatterns = [
-    url(r'', include('people.urls')),
+    url(r'', include('xancestry.urls')),
     url(r'^admin/', admin.site.urls),
     url(r'^tinymce/', include('tinymce.urls')),
     url(r'^login/$', django.contrib.auth.views.login, {'template_name': 'login.html'}, name='login'),
     url(r'^logout/$', django.contrib.auth.views.logout, {'next_page': '/'}, name='logout'),
 ]
 
-# Get Django to serve media files in debug mode.
-if settings.DEBUG:
-    urlpatterns += [url(r'^media/(?P<path>.*)$',
-                        django.views.static.serve,
-                        {'document_root': settings.MEDIA_ROOT})]
 
 urlpatterns = [
     path('admin/', admin.site.urls),

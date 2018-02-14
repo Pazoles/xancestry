@@ -39,7 +39,30 @@ INSTALLED_APPS = [
     # http://whitenoise.evans.io/en/stable/django.html#using-whitenoise-in-development
     'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
+    'xancestry',
+    'taggit',
+    'tinymce'
 ]
+
+
+
+
+# TinyMCE configuration
+TINYMCE_DEFAULT_CONFIG = {'theme': 'advanced',
+                          'relative_urls': False,
+                          'plugins': 'paste,autoresize',
+                          'width': '100%',
+                          'paste_text_sticky': True,
+                          'paste_text_sticky_default': True,
+                          'paste_text_linebreaktype': 'p',
+                          'content_css': '/static/people/css/tinymce.css',
+                          'theme_advanced_resizing': True,
+                          'theme_advanced_buttons1': 'bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,|,bullist,numlist,|,outdent,indent,|,link,unlink,|,sub,sup,charmap,|,undo,redo,|,cleanup,code'}
+
+# Taggit
+TAGGIT_TAGS_FROM_STRING = 'people.forms.tag_comma_splitter'
+TAGGIT_STRING_FROM_TAGS = 'people.forms.tag_comma_joiner'
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -136,3 +159,5 @@ ADMIN_EMAIL = 'pazoles@gmail.com'
 # Simplified static file serving.
 # https://warehouse.python.org/project/whitenoise/
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+

@@ -1,7 +1,7 @@
 from datetime import date
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.db import models
 from django.db.models import Count, Q
 from django.db.models.signals import post_delete
@@ -9,13 +9,14 @@ from django.dispatch.dispatcher import receiver
 from itertools import chain
 from opencage.geocoder import OpenCageGeocode
 from operator import attrgetter
-from people.fields import UncertainDateField
-from people.relations import closest_common_ancestor, describe_relative
+from xancestry.fields import UncertainDateField
+from xancestry.relations import closest_common_ancestor, describe_relative
 from taggit.managers import TaggableManager
 from taggit.models import Tag, TaggedItem
 from tinymce.models import HTMLField
 import os
-import settings
+
+OPENCAGE_API_KEY = '590cf8900493483eab897d52bcfb7117'
 
 class Country(models.Model):
     name = models.CharField(max_length=50)
@@ -36,7 +37,7 @@ class Location(models.Model):
     county_state_province = models.CharField(max_length=30,
                                              verbose_name='county/state/province',
                                              help_text='County / state / province')
-    country = models.ForeignKey(Country, help_text='Country')
+    country = models.ForeignKey(Country, null=True, help_text='Country', on_delete=models.SET_NULL)
     # If left blank, these fields will be set by geocoding when the model is
     # saved.
     latitude = models.FloatField(blank=True, null=True)
@@ -45,7 +46,7 @@ class Location(models.Model):
     def save(self, *args, **kwargs):
         if not (self.latitude and self.longitude):
             try:
-                geocoder = OpenCageGeocode(settings.OPENCAGE_API_KEY)
+                geocoder = OpenCageGeocode(OPENCAGE_API_KEY)
                 query = '{0}, {1}, {2}'.format(self.name,
                                                self.county_state_province,
                                                self.country.name)
@@ -111,7 +112,7 @@ class Person(models.Model):
     tags = TaggableManager(blank=True, help_text='Tags')
     # A person can be linked to a user account. This allows a user to see
     # information relevant to their own relationships.
-    user = models.OneToOneField(User, blank=True, null=True)
+    user = models.OneToOneField(User, blank=True, null=True,on_delete=models.SET_NULL)
 
     def name(self, use_middle_names=True, use_maiden_name=False):
         '''Returns the full name of this person.'''
@@ -325,10 +326,10 @@ class Event(models.Model):
                   (DEATH, 'Death'),
                   (BURIAL, 'Burial')]
 
-    person = models.ForeignKey(Person, related_name='events')
+    person = models.ForeignKey(Person, null=True, related_name='events',on_delete=models.SET_NULL)
     event_type = models.PositiveSmallIntegerField(choices=EVENT_TYPE)
     date = UncertainDateField()
-    location = models.ForeignKey(Location, blank=True, null=True, related_name='events')
+    location = models.ForeignKey(Location, blank=True, null=True, related_name='events',on_delete=models.SET_NULL)
     reference = models.URLField(blank=True, null=True)
 
     def verb(self):
@@ -364,10 +365,10 @@ class Event(models.Model):
 class Marriage(models.Model):
     '''The marriage record links spouses.'''
     event_type = Event.MARRIAGE
-    husband = models.ForeignKey(Person, limit_choices_to={'gender': 'M'}, related_name='husband_of')
-    wife = models.ForeignKey(Person, limit_choices_to={'gender': 'F'}, related_name='wife_of')
+    husband = models.ForeignKey(Person, null=True,limit_choices_to={'gender': 'M'}, related_name='husband_of',on_delete=models.SET_NULL)
+    wife = models.ForeignKey(Person, null=True,limit_choices_to={'gender': 'F'}, related_name='wife_of',on_delete=models.SET_NULL)
     date = UncertainDateField(blank=True, null=True)
-    location = models.ForeignKey(Location, blank=True, null=True, related_name='weddings')
+    location = models.ForeignKey(Location, blank=True, null=True, related_name='weddings',on_delete=models.SET_NULL)
     divorced = models.BooleanField(default=False)
     reference = models.URLField(blank=True, null=True)
 
@@ -388,7 +389,7 @@ class Photograph(models.Model):
     people = models.ManyToManyField(Person, related_name='photos')
     caption = models.TextField(blank=True)
     date = UncertainDateField(blank=True, null=True)
-    location = models.ForeignKey(Location, blank=True, null=True, related_name='photos')
+    location = models.ForeignKey(Location, blank=True, null=True, related_name='photos',on_delete=models.SET_NULL)
 
     def __str__(self):
         return self.image.url

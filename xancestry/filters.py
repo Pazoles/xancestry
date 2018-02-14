@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.db.models import Q
-from people.models import Event
+from xancestry.models import Event
 
 class HasEventFilter(admin.SimpleListFilter):
     '''Convenient base class for filters that test for the existence of

@@ -1,7 +1,7 @@
 from django import forms
 from django.db import transaction
-from people.fields import UncertainDateFormField
-from people.models import Event, Location, Person
+from xancestry.fields import UncertainDateFormField
+from xancestry.models import Event, Location, Person
 
 class BootstrapModelForm(forms.ModelForm):
     '''Convenient base class for applying Bootstrap CSS classes to fields in

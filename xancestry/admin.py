@@ -2,8 +2,8 @@ from django import forms
 from django.contrib import admin
 from django.contrib.auth.models import Group, User
 from django.contrib.auth.admin import GroupAdmin, UserAdmin
-from people.filters import BirthFilter, BaptismFilter, DeathFilter, BurialFilter, HasReferenceFilter
-from people.models import Country, Location, Person, Marriage, Photograph, Document, Event, SurnameVariant
+from xancestry.filters import BirthFilter, BaptismFilter, DeathFilter, BurialFilter, HasReferenceFilter
+from xancestry.models import Country, Location, Person, Marriage, Photograph, Document, Event, SurnameVariant
 
 class FamilyTreeAdminSite(admin.AdminSite):
     def each_context(self, request):
