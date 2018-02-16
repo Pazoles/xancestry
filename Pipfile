@@ -21,6 +21,7 @@ django-taggit = "*"
 django-tinymce = "*"
 opencage = "*"
 django-stronghold = "*"
+pillow = "*"
 
 
 [dev-packages]
