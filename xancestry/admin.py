@@ -3,11 +3,11 @@ from django.contrib import admin
 from django.contrib.auth.models import Group, User
 from django.contrib.auth.admin import GroupAdmin, UserAdmin
 from xancestry.filters import BirthFilter, BaptismFilter, DeathFilter, BurialFilter, HasReferenceFilter
-from xancestry.models import Country, Location, Person, Marriage, Photograph, Document, Event, SurnameVariant
+from xancestry.models import *
 
-class FamilyTreeAdminSite(admin.AdminSite):
+class XancestryAdminSite(admin.AdminSite):
     def each_context(self, request):
-        context = super(FamilyTreeAdminSite, self).each_context(request)
+        context = super(XancestryAdminSite, self).each_context(request)
         context['list'] = Person.objects.select_related('birth')
         return context
 
@@ -26,6 +26,9 @@ class EventInline(admin.TabularInline):
     extra = 1
 
 class PersonAdmin(admin.ModelAdmin):
+    class Meta:
+        model=Person
+        fields=('surname', 'forename', 'middle_names', 'known_as', 'maiden_name', 'notes','gender', 'blood_relative', 'deceased')
     fieldsets = [(None, {'fields': [('forename', 'middle_names', 'known_as'),
                                     ('surname', 'maiden_name'),
                                     ('gender', 'blood_relative', 'deceased'),
@@ -101,7 +104,6 @@ class SurnameVariantAdmin(admin.ModelAdmin):
     search_fields = ['canonical', 'variant']
 
 
-admin.site = FamilyTreeAdminSite()
 
 admin.site.register(Group, GroupAdmin)
 admin.site.register(User, UserAdmin)
